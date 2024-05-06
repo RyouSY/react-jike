@@ -10,8 +10,8 @@ const Login = () => {
   const navigate = useNavigate()
   const onFinish = (values) => {
     dispatch(fetchLogin(values))
-    // navigate('/')
     message.success('登录成功')
+    navigate('/home')
   };
   return (
     <div className="login">
