@@ -11,7 +11,7 @@ import {
   message
 } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import './index.scss'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
@@ -50,8 +50,8 @@ const Publish = () => {
     await createArticleApi(reqData)
     message.success('文章发布成功')
     navigate('/article')
-
   }
+
 
   
   

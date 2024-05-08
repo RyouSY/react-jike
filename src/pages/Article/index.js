@@ -17,15 +17,25 @@ const Article = () => {
   const { channleList } = useChannels()
   const [articleList, setArticleList] = useState([])
   const [count, setCount] = useState([])
-  const getList = async () => {
-    const result = await getArticleListApi()
+
+  const [reqData, setReqData] = useState({
+    status: '',
+    channel_id: '',
+    begin_pubdate: '',
+    end_pubdate: '',
+    page: 1,
+    per_page: 4
+  })
+
+  const getList = async (reqData) => {
+    const result = await getArticleListApi(reqData)
     setArticleList(result.data.data.results)
     setCount(result.data.data.total_count)
   }
 
   useEffect(() => {
-    getList()
-  }, [])
+    getList(reqData)
+  }, [reqData])
   const status = {
     1: <Tag color="warning">待审核</Tag>,
     2: <Tag color="green">审核通过</Tag>
@@ -82,7 +92,18 @@ const Article = () => {
       }
     }
   ]
+  
 
+  const onFinish = (formValue) => {
+    console.log(formValue)
+    setReqData({
+      ...reqData,
+      channel_id: formValue.channel_id,
+      status: formValue.status,
+      begin_pubdate: formValue.date[0].format('YYYY-MM-DD'),
+      end_pubdate: formValue.date[1].format('YYYY-MM-DD')
+    })
+  }
   return (
     <div>
       <Card
@@ -102,7 +123,7 @@ const Article = () => {
         }
         style={{ marginBottom: 20 }}
       >
-        <Form initialValues={{ status: -1 }}>
+        <Form initialValues={{ status: -1 }} onFinish={onFinish}>
           <Form.Item label="状态" name="status">
             <Radio.Group>
               <Radio value={-1}>全部</Radio>
