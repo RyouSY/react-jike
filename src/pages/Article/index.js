@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import { Card, Breadcrumb, Form, Button, Radio, DatePicker, Select, Space, Table, Tag } from 'antd'
 import locale from 'antd/es/date-picker/locale/zh_CN'
 import './index.scss'
@@ -95,13 +94,20 @@ const Article = () => {
   
 
   const onFinish = (formValue) => {
-    console.log(formValue)
     setReqData({
       ...reqData,
       channel_id: formValue.channel_id,
       status: formValue.status,
       begin_pubdate: formValue.date[0].format('YYYY-MM-DD'),
       end_pubdate: formValue.date[1].format('YYYY-MM-DD')
+    })
+  }
+
+  const onChangePage = (page) => {
+    setReqData({
+      ...reqData,
+      page: page.current,
+      per_page: page.pageSize
     })
   }
   return (
@@ -158,7 +164,16 @@ const Article = () => {
         </Form>
       </Card>
       <Card title={`根据筛选条件共查询到 ${count} 条结果：`}>
-        <Table rowKey="id" columns={columns} dataSource={articleList} />
+        <Table 
+          rowKey="id" 
+          columns={columns} 
+          dataSource={articleList} 
+          pagination={{
+            total: count,
+            pageSize: reqData.per_page
+          }} 
+          onChange={onChangePage}
+        />
       </Card>
     </div>
   )
