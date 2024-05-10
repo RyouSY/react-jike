@@ -22,3 +22,10 @@ export const getArticleListApi = (params) => {
     params
   })
 }
+
+export const deleteArticleListApi = (id) => {
+  return request({
+    url: `/mp/articles/${id}`,
+    method: 'DELETE'
+  })
+}
