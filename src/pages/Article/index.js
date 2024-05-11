@@ -8,11 +8,13 @@ import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import img404 from '@/assets/error.png'
 import { getArticleListApi, deleteArticleListApi } from '@/api/article'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const { Option } = Select
 const { RangePicker } = DatePicker
 
 const Article = () => {
+  const navigate = useNavigate()
   const { channleList } = useChannels()
   const [articleList, setArticleList] = useState([])
   const [count, setCount] = useState([])
@@ -79,7 +81,7 @@ const Article = () => {
       render: data => {
         return (
           <Space size="middle">
-            <Button type="primary" shape="circle" icon={<EditOutlined />} />
+            <Button type="primary" shape="circle" icon={<EditOutlined />} onClick={() => navigate(`/publish?id=${data.id}`)} />
             <Popconfirm
               title="删除"
               description="确定要删除当前文章吗?"
