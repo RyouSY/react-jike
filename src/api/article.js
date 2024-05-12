@@ -35,3 +35,11 @@ export const getArticleApi = (id) => {
     url: `/mp/articles/${id}`
   })
 }
+
+export const updateArticleApi = (data) => {
+  return request({
+    url: `/mp/articles/${data.id}?draft=false`,
+    method: 'PUT',
+    data
+  })
+}

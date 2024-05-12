@@ -16,7 +16,7 @@ import './index.scss'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import { useEffect, useState } from 'react'
-import { createArticleApi, getArticleApi } from '@/api/article'
+import { createArticleApi, getArticleApi, updateArticleApi } from '@/api/article'
 import useChannels from '@/hooks/useChannel'
 
 const { Option } = Select
@@ -43,12 +43,24 @@ const Publish = () => {
       content,
       cover: {
         type: imageType,
-        images: imageList.map(item => item.response.data.url)
+        images: imageList.map(item => {
+          if(item.response){
+            return item.response.data.url
+          } else {
+            return item.url
+          }
+        })
       },
       channel_id
     }
-    await createArticleApi(reqData)
-    message.success('文章发布成功')
+    if(articleId){
+      await updateArticleApi({...reqData, id: articleId})
+      message.success('文章编辑成功')
+    } else {
+      await createArticleApi(reqData)
+      message.success('文章发布成功')
+    }
+    
     navigate('/article')
   }
   const [searchParams] = useSearchParams()
@@ -58,6 +70,7 @@ const Publish = () => {
 
   useEffect(() => {
     const getArticleById = async () => {
+      if(!articleId) return
       const result = await getArticleApi(articleId)
       const data = result.data.data
       form.setFieldsValue({
@@ -86,7 +99,7 @@ const Publish = () => {
                 href: '/home'
               },
               {
-                title: '发布文章'
+                title: articleId ? '编辑文章' :'发布文章'
               }
             ]}
           />
